@@ -56,21 +56,24 @@ def load_mat(dataset, train_rate=0.3, val_rate=0.1):
     attr = data['Attributes'] if ('Attributes' in data) else data['X']
     network = data['Network'] if ('Network' in data) else data['A']
 
-    adj = sp.csr_matrix(network)
-    feat = sp.lil_matrix(attr)
+    adj = sp.csr_matrix(network) # csc(Network) -> csr 輸出dense matrix格式: (1, 2)	1 -> (列，行) 值
+    feat = sp.lil_matrix(attr) # 使用两列表存非0元素。data保存每列中的非零元素值,rows保存每列中的非零元素所在的行。
 
-    labels = np.squeeze(np.array(data['Class'],dtype=np.int64) - 1)
+    labels = np.squeeze(np.array(data['Class'],dtype=np.int64) - 1) # 從0開始
     num_classes = np.max(labels) + 1
     labels = dense_to_one_hot(labels,num_classes)
 
+    # Label = str+attr_anomaly_label (沒有用到類別)
     ano_labels = np.squeeze(np.array(label))
     if 'str_anomaly_label' in data:
         str_ano_labels = np.squeeze(np.array(data['str_anomaly_label']))
         attr_ano_labels = np.squeeze(np.array(data['attr_anomaly_label']))
+    # ACM沒有anomaly_label
     else:
         str_ano_labels = None
         attr_ano_labels = None
 
+    # train-test split
     num_node = adj.shape[0]
     num_train = int(num_node * train_rate)
     num_val = int(num_node * val_rate)

@@ -65,7 +65,7 @@ class Discriminator(nn.Module):
 
     def forward(self, features, summary):
         s = torch.nn.functional.cosine_similarity(self.fc_n(features), self.fc_g(summary))
-        return -1 * s.unsqueeze(0)
+        return -1 * s.unsqueeze(0) # score=C*-1
 
 
 def aggregation(graph, feat, k):
