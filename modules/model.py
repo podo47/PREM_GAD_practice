@@ -10,6 +10,7 @@ class Dataloader:
     def __init__(self, g, features, k, dataset_name = None):
         self.k = k
         self.g = g
+        # pos pair -> 0 / neg pair -> 1
         self.label_zeros = torch.zeros(1, g.number_of_nodes()).to(features.device)
         self.label_ones = torch.ones(1, g.number_of_nodes()).to(features.device)
 

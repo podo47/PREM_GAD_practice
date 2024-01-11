@@ -28,6 +28,7 @@ def train_model(args, dataloader, model, optimizer, loss_function):
             score_aug = rescale(model(en_p, eg_aug))
             score_nod = rescale(model(en_p, en_n))
 
+            # pos pair -> 0 / neg pair -> 1
             loss_pos = loss_function(score_pos, dataloader.label_zeros)
             loss_aug = loss_function(score_aug, dataloader.label_ones)
             loss_nod = loss_function(score_nod, dataloader.label_ones)
